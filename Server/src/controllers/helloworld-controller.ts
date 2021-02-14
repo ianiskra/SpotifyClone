@@ -1,5 +1,14 @@
+import { HelloWorldService } from "../services/helloworld-service";
+
 export class HelloWorldController {
-    public static sayHello(req: any, res: any, next: any) {
-        res.send("Hello World from Controller");
+    private service: HelloWorldService;
+
+    public constructor() {
+        this.service = new HelloWorldService();
+    }
+    
+    public sayHello(req: any, res: any, next: any) {
+        console.log('this', this)
+        res.send(this.service.sayHello());
     }
 }
