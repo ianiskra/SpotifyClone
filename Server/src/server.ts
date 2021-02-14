@@ -1,11 +1,15 @@
 import express from 'express';
+import router from './routes'
 
 const app = express();
 
 const port = process.env.port || 8080;
 
-app.get('/', (req, res) => {
-    res.send("Hello World");
+app.use(router);
+
+app.use((req, res, next)=>{
+    // global error handler
+    console.log('error')
 })
 
 app.listen(port, ()=>{
