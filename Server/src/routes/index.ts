@@ -1,11 +1,10 @@
-import express from "express"
+import express from "express";
+
+import { HelloWorldController } from "../controllers/helloworld-controller";
 
 const router = express.Router();
 
 router.route('/')
-    .get((req, res, next) => {
-        res.send("Hello World from router");
-        //next();
-    });
+    .get(HelloWorldController.sayHello);
 
 export default router;
