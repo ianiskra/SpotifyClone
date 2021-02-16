@@ -5,6 +5,10 @@ const app = express();
 
 const port = process.env.port || 8080;
 
+// this will allow the express framework to read JSON in the request body,
+//   and parse it to a JavaScript object
+app.use(express.json());
+
 app.use(router);
 
 app.use((req, res, next)=>{
