@@ -1,8 +1,9 @@
 import { Schema, Document, Model } from 'mongoose';
 import db from './db-connection';
+import bcrypt from 'bcrypt';
 
 // Strong typing of mongoose document
-interface IUser extends Document {
+export interface IUser extends Document {
     username: string;
     password:string;
     name: string;
@@ -26,10 +27,13 @@ UserSchema.pre('validate', async function (next) {
 // Steps to perform before we save
 UserSchema.pre('save', async function (next) {
     // encrypt and salt password
+    this.password = await bcrypt.hash(this.password, 10);
 });
 
-UserSchema.methods.comparePassword = function(trialPass: string) {
-    return this.password == trialPass;
+UserSchema.methods.comparePassword = async function(trialPass: string) {
+    
+    // Compare trial with hashed password from database
+    return await bcrypt.compare(trialPass, this.password);
 }
 
 const User: Model<IUser> = db.model<IUser>('User', UserSchema);

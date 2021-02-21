@@ -15,11 +15,16 @@ export class LoginController {
 
         const user = await this.service.loginByUsernamePassword(username, password);
 
-        if (user) {
-            console.log(user);
-            res.json({ ...user, status: "logged in" })
-        } else {
-            res.json({ err: `could not log in ${username}` })
+        try{
+            if (user) {
+                //console.log(user);
+                const token = await this.service.generateToken(user);
+                res.json({user: this.service.toUserObject(user), token, status: "logged in" });
+            } else {
+                res.json({ msg: `could not log in ${username}` })
+            }
+        } catch(err) {
+            res.json({ msg: `could not log in ${username}`, err })
         }
     }
 
@@ -30,14 +35,19 @@ export class LoginController {
         console.log('Login controller register password', password);
         console.log('Login controller register name', name);
 
-        const user = await this.service.registerWithUsernamePassword(
-            username, password, name);
+        try {
+            const user = await this.service.registerWithUsernamePassword(
+                username, password, name);
 
-        if (user) {
-            console.log(user);
-            res.json({ ...user, status: "logged in" })
-        } else {
-            res.json({ err: `could not log in ${username}` })
+            if (user) {
+                //console.log(user);
+                const token = await this.service.generateToken(user);
+                res.json({ user: this.service.toUserObject(user), token, status: "registered successfully"});
+            } else {
+                res.json({ msg: `could not register ${username}` })
+            }
+        } catch (err) {
+            res.json({ msg: `could not register ${username}`, err })
         }
     }
 }
