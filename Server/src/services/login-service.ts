@@ -1,21 +1,22 @@
 import User, {IUser} from '../models/user';
-
 import jsonwebtoken from 'jsonwebtoken';
 
 const JWT_SECRET = 'the&*(*) jwt C#creste';
 
+// Create Login Service
 export class LoginService {
 
     public async loginByUsernamePassword(username: string, password: string): Promise<IUser|null> {
         const user = await User.findOne({ username }).exec();
 
+        // check existing user
         if (user) {
+
             // compare the passwords
             if (await user.comparePassword(password)) {
                 return user;
             }
         }
-
         return null;
     }
 
@@ -27,6 +28,8 @@ export class LoginService {
             admin: false
         };
         console.log('tokenBody', tokenBody);
+
+        // create token obeject for private key
         const token = jsonwebtoken.sign(tokenBody, JWT_SECRET);
         console.log('validate 1', await this.validateToken(token));
         console.log('validate 2', await this.validateTokenBadSecret(token));
