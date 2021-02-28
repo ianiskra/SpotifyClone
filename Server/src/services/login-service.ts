@@ -29,20 +29,26 @@ export class LoginService {
         };
         console.log('tokenBody', tokenBody);
 
-        // create token obeject for private key
+        // create token object for private key
         const token = jsonwebtoken.sign(tokenBody, JWT_SECRET);
         console.log('validate 1', await this.validateToken(token));
         console.log('validate 2', await this.validateTokenBadSecret(token));
         return token;
     }
 
-    public async validateToken(token: string): Promise<boolean> {
+    public async validateToken(token: string): Promise<IUser|null> {
         try {
-            const result = await jsonwebtoken.verify(token, JWT_SECRET);
+            const result = await jsonwebtoken.verify(token, JWT_SECRET) as any;
             console.log('validateToken(token: string): result = ', result);
-            return true;
+            if (result != null) {
+                const user = await User.findById(result.sub).exec();
+
+                return user;
+            }
+
+            return null;
         } catch (err) {
-            return false;
+            return null;
         }
     }
 
@@ -84,3 +90,5 @@ export class LoginService {
         } as IUser;
     }
 }
+
+export default new LoginService();

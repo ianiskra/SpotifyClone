@@ -37,7 +37,4 @@ UserSchema.methods.comparePassword = async function(trialPass: string) {
 }
 
 const User: Model<IUser> = db.model<IUser>('User', UserSchema);
-
-
-
 export default User;
