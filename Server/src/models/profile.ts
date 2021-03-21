@@ -15,4 +15,4 @@ const ProfileSchema = new Schema<IProfile>({
 });
 
 // const Profile: Model<IProfile> = 
-export default db.model<IProfile>('User', ProfileSchema);
+export default db.model<IProfile>('Profile', ProfileSchema);

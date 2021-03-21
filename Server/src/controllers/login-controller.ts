@@ -21,10 +21,10 @@ export class LoginController {
                 const token = await this.service.generateToken(user);
                 res.json({user: this.service.toUserObject(user), token, status: "logged in" });
             } else {
-                res.json({ msg: `could not log in ${username}` })
+                res.status(401).json({ msg: `could not log in ${username}` })
             }
         } catch(err) {
-            res.json({ msg: `could not log in ${username}`, err })
+            res.status(500).json({ msg: `could not log in ${username}`, err })
         }
     }
 

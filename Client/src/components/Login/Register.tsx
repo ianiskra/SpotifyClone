@@ -2,18 +2,19 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from './Login.module.css';
 import loginService from '../../services/login-service';
-import { Link } from 'react-router-dom';
+const Register: React.FC<{setToken: any}> = (props) => {
 
-const Login: React.FC<{setToken: any}> = (props) => {
-
+  const [name, setName]: [string|undefined, any|undefined] = useState();
   const [username, setUsername]: [string|undefined, any|undefined] = useState();
   const [password, setPassword]: [string | undefined, any | undefined] = useState();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (username && password) {
-      const token = await loginService.loginWithUsernamePassword(username, password);
+    if (username && password && name) {
+      const token = await loginService.register(username, password, name);
 
+      setPassword(undefined);
+      setName(undefined);
       if(token) {
         props.setToken(token);
         console.log('Login Component  - handleSubmit(): login successful', token);
@@ -46,22 +47,22 @@ const Login: React.FC<{setToken: any}> = (props) => {
               onChange={(e: any) => setPassword(e.target.value)}
             />
           </label>
+          <label>
+            name
+            <input 
+              type="text" name="name"
+              onChange={(e: any) => setName(e.target.value)}
+            />
+          </label>
           <button type="submit">Submit</button>
         </form>
-      </div>
-      <div id="sign-up">
-        <label>Don't have an account?
-          <Link to="/register">
-            <button type="submit">Sign up for Spotify</button>
-          </Link>
-        </label>
       </div>
     </div>
   )
 };
 
-Login.propTypes = {
+Register.propTypes = {
   setToken: PropTypes.func.isRequired
 }
 
-export default Login;
+export default Register;

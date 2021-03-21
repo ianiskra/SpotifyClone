@@ -7,6 +7,7 @@ import Home from './components/Home/Home';
 import Library from './components/Library/Library';
 import Search from './components/Search/Search';
 import Login from './components/Login/Login';
+import Register from './components/Login/Register';
 
 function App() {
 
@@ -24,7 +25,11 @@ function App() {
           <Route path="/library"><Library /></Route>
           <Route path="/search"><Search /></Route>
           <Route path="/"><Home /></Route>
-        </Switch>:<Login setToken={setToken} />
+        </Switch>:
+        <Switch>
+          <Route path="/register" render={()=><Register setToken={setToken} />}></Route>
+          <Route render={()=><Login setToken={setToken} />}></Route>
+        </Switch>
       }
     </Router>
   );
